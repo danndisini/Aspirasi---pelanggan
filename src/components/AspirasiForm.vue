@@ -128,19 +128,19 @@
         </div>
       </div>
 
-      <!-- Pelanggan: Ingin dihubungi? -->
+      <!-- Follow-up options -->
       <div class="follow-up-group">
-        <label class="follow-up-label">Apakah Anda ingin dihubungi untuk tindak lanjut? *</label>
+        <span class="follow-up-label">Apakah Anda ingin dihubungi untuk tindak lanjut? *</span>
         <div class="follow-up-options">
-          <label class="follow-option" :class="{ selected: form.tindakLanjut === 'Ya' }">
+          <label :class="{ selected: form.tindakLanjut === 'Ya' }">
             <input type="radio" value="Ya" v-model="form.tindakLanjut" required @change="updateTeleponRequired" />
             <span>Ya</span>
           </label>
-          <label class="follow-option" :class="{ selected: form.tindakLanjut === 'Tidak' }">
+          <label :class="{ selected: form.tindakLanjut === 'Tidak' }">
             <input type="radio" value="Tidak" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
             <span>Tidak</span>
           </label>
-          <label class="follow-option" :class="{ selected: form.tindakLanjut === 'Mungkin' }">
+          <label :class="{ selected: form.tindakLanjut === 'Mungkin' }">
             <input type="radio" value="Mungkin" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
             <span>Mungkin</span>
           </label>
@@ -178,25 +178,20 @@ const showSuccess = ref(false)
 const isIOS = ref(false)
 const showOptions = ref(false)
 
-// Computed property untuk menentukan apakah nomor telepon wajib diisi
 const teleponRequired = computed(() => {
   return form.value.tindakLanjut === 'Ya' || form.value.tindakLanjut === 'Mungkin'
 })
 
-// Deteksi platform
 onMounted(() => {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera
   isIOS.value = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream
 })
 
-function updateTeleponRequired() {
-  // Fungsi ini akan dipanggil setiap kali pilihan tindak lanjut berubah
-  // Computed property akan otomatis update
-}
+function updateTeleponRequired() {}
 
 function validateTelepon() {
   const angkaRegex = /^[0-9]*$/
-  telefonError.value = !angkaRegex.test(form.value.telepon)
+  teleponError.value = !angkaRegex.test(form.value.telepon)
 }
 
 function onlyNumber(e) {
@@ -211,13 +206,11 @@ const fileInput = ref(null)
 const cameraInput = ref(null)
 const galleryInput = ref(null)
 
-// Fungsi untuk Android - mencegah file picker default
 function handleAndroidFileClick(e) {
   e.preventDefault()
   showAndroidOptions()
 }
 
-// Show Android options modal
 function showAndroidOptions() {
   showOptions.value = true
 }
@@ -226,7 +219,6 @@ function closeOptions() {
   showOptions.value = false
 }
 
-// Android option handlers
 function selectCamera() {
   closeOptions()
   setTimeout(() => {
@@ -266,8 +258,6 @@ function handleFileChange(event) {
     reader.onload = (e) => previewGambar.value.push(e.target.result)
     reader.readAsDataURL(file)
   }
-  
-  // Reset input values setelah memproses file
   event.target.value = ''
 }
 
@@ -277,19 +267,16 @@ async function submitForm() {
     return
   }
 
-  // Validasi nomor telepon jika diperlukan
   if (teleponRequired.value && (!form.value.telepon || form.value.telepon.trim() === '')) {
     alert("Nomor telepon wajib diisi jika Anda ingin dihubungi untuk tindak lanjut!")
     return
   }
 
-  // Validasi format nomor telepon jika diisi
-  if (form.value.telepon && telefonError.value) {
+  if (form.value.telepon && teleponError.value) {
     alert("Harap masukkan nomor telepon yang valid (hanya angka 0-9)!")
     return
   }
 
-  // Tampilkan toast
   showSuccess.value = true
   setTimeout(() => {
     showSuccess.value = false
@@ -339,7 +326,6 @@ async function submitForm() {
     })
   }
 
-  // Reset form
   form.value = {
     nama: '',
     noPolisi: '',
@@ -354,6 +340,7 @@ async function submitForm() {
 </script>
 
 <style scoped>
+/* ==================== HEADER ==================== */
 .header {
   top: 0;
   display: flex;
@@ -362,6 +349,7 @@ async function submitForm() {
   padding: 1rem 1.5rem;
   background-color: inherit;
   z-index: 10;
+  position: sticky;
 }
 
 .header-content {
@@ -384,8 +372,13 @@ async function submitForm() {
   padding: 0.5rem 1rem;
   z-index: 9;
   text-align: left;
-  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.main-title:hover {
+  background: #fff5f5;
 }
 
 @media (max-width: 600px) {
@@ -396,6 +389,7 @@ async function submitForm() {
   }
 }
 
+/* ==================== ALERT ==================== */
 .input-alert {
   margin-top: -0.6rem;
   margin-bottom: 1rem;
@@ -416,6 +410,7 @@ async function submitForm() {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==================== FORM ==================== */
 .form-aspirasi {
   background: #fff;
   padding: 1rem;
@@ -439,11 +434,18 @@ input, select, textarea {
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #d32f2f;
+  box-shadow: 0 0 5px rgba(211,47,47,0.4);
+  outline: none;
 }
 
 textarea { resize: vertical; }
 
-/* Android File Button */
+/* ==================== FILE BUTTON ==================== */
 .android-file-btn {
   width: 100%;
   padding: 12px;
@@ -469,7 +471,7 @@ textarea { resize: vertical; }
   font-size: 0.85rem;
 }
 
-/* Modal Styles */
+/* ==================== MODAL ==================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -576,6 +578,7 @@ textarea { resize: vertical; }
   to { transform: translateY(0); }
 }
 
+/* ==================== IMAGE PREVIEW ==================== */
 .preview-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -609,7 +612,7 @@ textarea { resize: vertical; }
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
 }
 
 .remove-btn:hover {
@@ -617,6 +620,7 @@ textarea { resize: vertical; }
   transform: scale(1.2);
 }
 
+/* ==================== BUTTON ==================== */
 .submit-btn {
   width: 100%;
   background-color: #d32f2f;
@@ -626,6 +630,11 @@ textarea { resize: vertical; }
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #b71c1c;
 }
 
 .back-btn {
@@ -648,6 +657,7 @@ textarea { resize: vertical; }
   background: rgba(211, 47, 47, 0.1);
 }
 
+/* ==================== FOLLOW-UP OPTIONS ==================== */
 .follow-up-group {
   margin-bottom: 1.5rem;
 }
@@ -731,6 +741,7 @@ textarea { resize: vertical; }
   background-color: #ffe5e5;
 }
 
+/* ==================== TOAST ==================== */
 .toast {
   position: fixed;
   top: 20px;
