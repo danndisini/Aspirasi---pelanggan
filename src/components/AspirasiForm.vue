@@ -349,7 +349,7 @@ async function submitForm() {
   padding: 1rem 1.5rem;
   background-color: inherit;
   z-index: 10;
-  position: sticky;
+
 }
 
 .header-content {
