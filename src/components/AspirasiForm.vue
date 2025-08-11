@@ -130,25 +130,25 @@
 
       <!-- Follow-up options -->
       <div class="follow-up-group">
-        <span class="follow-up-label">Apakah Anda ingin dihubungi untuk tindak lanjut? *</span>
-        <div class="follow-up-options">
-          <label :class="{ selected: form.tindakLanjut === 'Ya' }">
-            <input type="radio" value="Ya" v-model="form.tindakLanjut" required @change="updateTeleponRequired" />
-            <span>Ya</span>
-          </label>
-          <label :class="{ selected: form.tindakLanjut === 'Tidak' }">
-            <input type="radio" value="Tidak" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
-            <span>Tidak</span>
-          </label>
-          <label :class="{ selected: form.tindakLanjut === 'Mungkin' }">
-            <input type="radio" value="Mungkin" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
-            <span>Mungkin</span>
-          </label>
-        </div>
-        <div v-if="teleponRequired" class="follow-up-note">
-          📞 Nomor telepon wajib diisi agar kami dapat menghubungi Anda.
-        </div>
-      </div>
+  <span class="follow-up-label">Apakah Anda ingin dihubungi untuk tindak lanjut? *</span>
+  <div class="follow-up-options">
+    <label :class="{ selected: form.tindakLanjut === 'Ya' }">
+      <input type="radio" value="Ya" v-model="form.tindakLanjut" required @change="updateTeleponRequired" />
+      <span class="label-text">Ya</span>
+    </label>
+    <label :class="{ selected: form.tindakLanjut === 'Tidak' }">
+      <input type="radio" value="Tidak" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
+      <span class="label-text">Tidak</span>
+    </label>
+    <label :class="{ selected: form.tindakLanjut === 'Mungkin' }">
+      <input type="radio" value="Mungkin" v-model="form.tindakLanjut" @change="updateTeleponRequired" />
+      <span class="label-text">Mungkin</span>
+    </label>
+  </div>
+  <div v-if="teleponRequired" class="follow-up-note">
+    📞 Nomor telepon wajib diisi agar kami dapat menghubungi Anda.
+  </div>
+</div>
 
       <button type="submit" class="submit-btn">Kirim Aspirasi</button>
     </form>
@@ -740,6 +740,46 @@ textarea { resize: vertical; }
   border-color: red;
   background-color: #ffe5e5;
 }
+
+.follow-up-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+  color: #333;
+  user-select: none;
+}
+
+.follow-up-options label input[type="radio"] {
+  appearance: none; /* Hilangkan style bawaan iOS */
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d32f2f;
+  border-radius: 50%;
+  position: relative;
+}
+
+.follow-up-options label input[type="radio"]:checked {
+  background-color: #d32f2f;
+}
+
+.follow-up-options label .label-text {
+  flex: 1;
+}
+
+.follow-up-options label.selected {
+  border-color: #d32f2f;
+  background-color: #ffe5e5;
+  color: #b71c1c;
+}
+
 
 /* ==================== TOAST ==================== */
 .toast {
